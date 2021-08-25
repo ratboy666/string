@@ -1,0 +1,161 @@
+STRING.TXT
+
+
+Introduction ==================================================================
+
+
+STRLIB.REL is a string handling library for Microsoft FORTRAN-80.
+My initial target for AM9511 support was F80, but F80 implements
+FORTRAN IV, which is quite poor with string handling. MBASIC is
+better, but the garbage collection can take a long time on a 2MHz
+8080.
+
+David R Hanson published "A Simple Technique for Representing Strings
+in FORTRAN IV" in Communications of the ACM, November 1974. STRLIB
+is an implementation of that technique.
+
+The basic technique is to define a string by an offset and a length.
+These are two integers, and are packed into a single REAL number.
+FORTRAN-80 EQUIVALENCE statement is used to cast the REAL into the
+two needed INTEGER values.
+
+String storage is an arrray STRDAT (string data). All offsets are in
+the same array. This string space is divided into two sections: a
+PERMANENT area and a TEMPORARY area. The permanent area is a index 1
+and up, while the temporary area grows down from the top. A mark and
+release strategy is used to manage the temporary area, avoiding the
+costly garbage collection of MBASIC. As a pleasant benefit, LEFT$,
+RIGHT$ and MID$ return descriptors pointing to the source string;
+we ensure that middle of string cannot be assigned ("mostly" invariant).
+The only string modification is string concatenate is STRCAT.
+But, the RIGHT$, LEFT$ and MID$ functions work very quickly, as they
+need only create a new descriptor, with no data being copied.
+
+
+Use and Linking ===============================================================
+
+
+STRING.FOR is an example of the use of STRLIB:
+
+  F80 =STRING
+  L80 STRING,STRSTO,STRLIB/S,FORLIB/S,STRING/N/Y/E
+
+will compile and link STRING.FOR. STRSTO.REL contains the definition
+of the dynamic string storage area. STRSTO.FOR defines it as 4096
+bytes. More or less storage can be use by editing STRSTO.FOR, compiling
+it and linking the new STRSTO.REL. STRSTO.REL must be linked before
+STRLIB.REL is searched. Note that we have to be explicit about FORLIB,
+because bringing in STRLIB somehow overrides L80 automatic request.
+(I consider this a bug in L80).
+
+
+Routines ======================================================================
+
+
+      EXTERNAL STRSTO,STROFF,STRLEN,NEW$,TEMP$,MARK,RELEAS,STRCMP
+      EXTERNAL STRPUT,SETGET,STRCPY,STRPRI,LEFT$,MID$,RIGHT$
+      INTEGER STROFF,STRLEN,MARK,STRCMP
+      REAL NEW$,TEMP$,LEFT$,MID$,RIGHT$
+
+      REAL EMPTY$
+      INTEGER NOCHAR
+      COMMON /STRCON/EMPTY$,NOCHAR
+
+
+Detail ========================================================================
+
+
+STRSTO - STRING STORAGE COMMON
+    INTEGER STRMAX           Last used temporary index
+    INTEGER STRUSE           First free string data index
+    BYTE STRDAT(4096)        String data
+
+STRCON - STRING CONSTANTS
+    REAL EMPTY$              Empty string (length 0)
+    INTEGER NOCHAR           "No character" see CHARAT
+
+FUNCTION STROFF(S$)          Returns offset (1 based) of string in STRDAT
+    INTEGER STROFF
+    REAL S$
+
+FUNCTION STRLEN(S$)          Return length of string S$
+    INTEGER STRLEN
+    REAL S$
+
+SUBROUTINE STRPUT(S$,D,N)    Puts bytes into string
+    REAL S$                  Put N bytes from byte array D into string S$.
+    INTEGER N                String S$ must be large enough to accmodate N
+    BYTE D(N)                bytes of data (See NEW$ and TEMP$).
+
+SUBROUTINE STRGET(S$,D,N)    Get bytes from strings. Get N bytes from string
+    REAL S$                  S$ to array D. Takes the smaller of N or
+    INTEGER N                STRLEN(S$). This is used to access the actual
+    BYTE D(N)                characters in the string (See CHARAT).
+
+FUNCTION CHARAT(S$,I)        Character At. Gets a single character from string.
+    INTEGER CHARAT           S$. Returns NOCHAR if index I is not in the
+    REAL S$                  string. Returns -128..128, or 257 
+    INTEGER I             
+
+FUNCTION MARK(DUMMY)         Return storage mark for RELEAS. DUMMY is not used.
+    INTEGER MARK             MARK works withh RELEAS. It returns a 'mark' in
+    INTEGER DUMMY            string storage. Temporary strings can then be
+                             allocated with function TEMP$. When the temporary
+                             strings are to be released, the RELEAS subroutine
+                             is used to release all temorary storage back to
+                             to the MARK. The string routines do not implement
+                             dynamic storage, but the mark/release strategy
+                             works very well, and provides performance.
+
+SUBROUTINE RELEAS(M)         Release all temporary storage to mark M. Release
+    INTEGER M                all temporaries allocation with TEMP$ to last
+                             mark. See MARK function for more details.
+
+FUNCTION TEMP$(N)            Allocate temporary string of size N. Allocates
+    REAL TEMP$               a temporary string of size N. The string is set
+    INTEGER N                to length 0. See MARK and RELEAS for details on
+                             storage management.
+
+FUNCTION NEW$(N)             Allocate permanent string of size N. NEW$
+    REAL NEW$                allocates a new string of size N. Unlike strings
+    INTEGER N                allocated with TEMP$, storage cannot be reclaimed.
+                             NEW$ and TEMP$ strings share the same storage
+                             array. The string returned is of length 0.
+
+SUBROUTINE STRCPY(DST$,SRC$) Copy SRC$ to DST$. DST$ must be large enough
+    REAL DST$,SRC$           to accomodate SRC$.
+
+SUBROUTINE STRCAT(DST$,SRC$) Concatenate SRC$ to the end of DST$. DST$ must be
+    REAL DST$,SRC$           long enough to accomodate the result as this is
+                             not range checked.
+
+SUBROUTINE STRPRI(S$)        Print S$ for a maximum of 132 character. It is
+    REAL S$                  printed on a line by itself. Uses STRGET and
+                             STRLEN functions. You may just want to use
+                             STRPRI as an example.
+
+FUNCTION LEFT$(S$,N)         Return leftmost N characters of string S$.
+    REAL LEFT$               From MBASIC.
+    REAL S$
+    INTEGER N
+
+FUNCTION MID$(S$,N,M)        Return M characters beginning with offset N
+    REAL MID$                of string S$. From MBASIC.
+    REAL S$
+    INTEGER N,M
+
+FUNCTION RIGHT$(S$,N)        Return rightmost N characters of string S$.
+    REAL RIGHT$              From MBASIC.
+    REAL S$
+    INTEGER N
+
+FUNCTION STRCMP(S1$,S2$)     String compare. Compare strings S1$ and S2$.
+    INTEGER STRCMP           Return positive if S1$ is larger, zero if equal,
+    REAL S1$,S2$             and negative if S2$ is larger. Compare by
+                             comparing each character. Views each character as
+                             value 0..255. Since ASCII is used, 65 is uppercase
+                             A, 97 is is lowercase a. ASCII only defines
+                             characters 0 to 127. The range 128 to 255 is not
+                             defined. If the character set is UTF-8, all values
+                             are significant (also for binary data).
+

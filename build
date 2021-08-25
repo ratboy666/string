@@ -1,0 +1,32 @@
+# I either build "natively" on an Altair-Duino, or use Zxcc.
+#
+#f80 =charat/l
+#f80 =left/l
+#f80 =mark/l
+#f80 =mid/l
+#f80 =new/l
+#f80 =releas/l
+#f80 =right/l
+#f80 =strcat/l
+#f80 =strcmp/l
+#f80 =strcpy/l
+#f80 =strget/l
+#f80 =strlen/l
+#f80 =stroff/l
+#f80 =strpri/l
+#f80 =strput/l
+#f80 =temp/l
+#
+# manually build library:
+# (under zxcc, I use cut and paste to enter command. order does count)
+# lib80 strlib=
+# strpri,charat,left,mark,mid,new,releas,right,strcat,strcmp,strcpy
+# strget,strlen,stroff,strput,temp
+#
+# assume we have strlib built, build string.com test:
+# note bug in l80: strlib/s removes forlib request, so we have to be explicit
+
+f80 =string/l
+f80 =strsto/l
+l80 string,strsto,strlib/s,forlib/s,string/n/y/e
+
