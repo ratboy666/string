@@ -8,3 +8,5 @@ inspiration.
 
 See string.txt for function details. Full source is provided -- everything is written in F80. A copy of FORLIB.REL
 that I used is also included.
+
+Fixed STRPI to accomodate zero-length string (Aug 30, 2021).
