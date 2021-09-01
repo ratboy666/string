@@ -16,18 +16,18 @@ The MBASIC functions that are not included - MID$ assignment, number to string (
 but these are not that important (for me) -- can be easily provided as "user level functions". The biggest issue
 I have is: MBASIC "IF S$ = "STRING" THEN ..." gets translated into
 
-M = MARK(0)
-T$ = TEMP$(5)
-CALL STRPUT(T$,'STRING',5)
-IRES = STRCMP(S$,T$)
-CALL RELEAS(M)
-IF (IRES .EQ. 0) THEN ...
+  M = MARK(0)
+  T$ = TEMP$(5)
+  CALL STRPUT(T$,'STRING',5)
+  IRES = STRCMP(S$,T$)
+  CALL RELEAS(M)
+  IF (IRES .EQ. 0) THEN ...
 
-1 - we could combine TEMP$ and STRPUT, as a function
-2 - express 'STRING' as '/STRING/' avoiding the explicit count
+  1 - we could combine TEMP$ and STRPUT, as a function
+  2 - express 'STRING' as '/STRING/' avoiding the explicit count
 
-M = MARK(0)
-IRES = STRCMP(S$, STR$('/STRING/'))
-CALL RELEAS(M)
+  M = MARK(0)
+  IRES = STRCMP(S$, STR$('/STRING/'))
+  CALL RELEAS(M)
 
 I am contemplating adding this STR$() function. I need to write code that uses it.
