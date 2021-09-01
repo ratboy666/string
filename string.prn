@@ -1,4 +1,4 @@
-FORTRAN-80 Ver. 3.44 Copyright 1978-1981 (C) By Microsoft -- Bytes: 37958
+FORTRAN-80 Ver. 3.44 Copyright 1978-1981 (C) By Microsoft -- Bytes: 27462
 Created: 10-Dec-81
 1	C **********************************************************************
 2	C *                                                                    *
@@ -136,26 +136,30 @@ Created: 10-Dec-81
 *****	006B'	LXI	H,[01 00 00 00]
 *****	006E'	CALL	$W2
 98	C
-99	      CALL STRCPY(T$,S$)
+99	C STRCPY TEST
+100	C
+101	      CALL STRCPY(T$,S$)
 *****	0071'	LXI	B,J
 *****	0074'	LXI	D,I
 *****	0077'	LXI	H,[01 00 00 00]
 *****	007A'	MVI	A,03
 *****	007C'	CALL	$I0
 *****	007F'	CALL	$ND
-100	      CALL STRPRI(S$)
+102	      CALL STRPRI(S$)
 *****	0082'	LXI	D,S$
 *****	0085'	LXI	H,T$
 *****	0088'	CALL	STRCPY
-101	      CALL STRPRI(T$)
+103	      CALL STRPRI(T$)
 *****	008B'	LXI	H,S$
 *****	008E'	CALL	STRPRI
-102	C
-103	      V$ = LEFT$(S$,5)
+104	C
+105	C LEFT/MID TEST
+106	C
+107	      V$ = LEFT$(S$,5)
 *****	0091'	LXI	H,T$
 *****	0094'	CALL	STRPRI
-104	      CALL STRPRI(V$)
-105	      V$ = MID$(S$,5,2)
+108	      CALL STRPRI(V$)
+109	      V$ = MID$(S$,5,2)
 *****	0097'	LXI	D,[05 00 00 00]
 *****	009A'	LXI	H,S$
 *****	009D'	CALL	LEFT$
@@ -163,9 +167,11 @@ Created: 10-Dec-81
 *****	00A3'	CALL	$T1
 *****	00A6'	LXI	H,V$
 *****	00A9'	CALL	STRPRI
-106	      CALL STRPRI(V$)
-107	C
-108	      M = MARK(0)
+110	      CALL STRPRI(V$)
+111	C
+112	C MARK/RELEAS TEST
+113	C
+114	      M = MARK(0)
 *****	00AC'	LXI	B,[02 00 00 00]
 *****	00AF'	LXI	D,[05 00 00 00]
 *****	00B2'	LXI	H,S$
@@ -174,23 +180,23 @@ Created: 10-Dec-81
 *****	00BB'	CALL	$T1
 *****	00BE'	LXI	H,V$
 *****	00C1'	CALL	STRPRI
-109	      WRITE (1,301) M
+115	      WRITE (1,301) M
 *****	00C4'	LXI	H,[00 00 00 00]
 *****	00C7'	CALL	MARK
 *****	00CA'	SHLD	M
 *****	00CD'	LXI	D,301L
 *****	00D0'	LXI	H,[01 00 00 00]
 *****	00D3'	CALL	$W2
-110	  301 FORMAT (1X,'M ',I6)
+116	  301 FORMAT (1X,'M ',I6)
 *****	00D6'	LXI	D,M
 *****	00D9'	LXI	H,[01 00 00 00]
 *****	00DC'	MVI	A,02
 *****	00DE'	CALL	$I0
 *****	00E1'	CALL	$ND
-111	      U$ = TEMP$(20)
-112	      I = STROFF(U$)
-113	      J = STRLEN(U$)
-114	      WRITE (1,300) I,J
+117	      U$ = TEMP$(20)
+118	      I = STROFF(U$)
+119	      J = STRLEN(U$)
+120	      WRITE (1,300) I,J
 *****	00E4'	LXI	H,[14 00 00 00]
 *****	00E7'	CALL	TEMP$
 *****	00EA'	LXI	H,U$
@@ -204,20 +210,20 @@ Created: 10-Dec-81
 *****	0102'	LXI	D,300L
 *****	0105'	LXI	H,[01 00 00 00]
 *****	0108'	CALL	$W2
-115	      CALL RELEAS(M)
+121	      CALL RELEAS(M)
 *****	010B'	LXI	B,J
 *****	010E'	LXI	D,I
 *****	0111'	LXI	H,[01 00 00 00]
 *****	0114'	MVI	A,03
 *****	0116'	CALL	$I0
 *****	0119'	CALL	$ND
-116	C
-117	      V$ = RIGHT$(S$,2)
+122	C
+123	      V$ = RIGHT$(S$,2)
 *****	011C'	LXI	H,M
 *****	011F'	CALL	RELEAS
-118	      J = STRLEN(V$)
-119	      CALL STRPRI(V$)
-120	      WRITE (1,302) J
+124	      J = STRLEN(V$)
+125	      CALL STRPRI(V$)
+126	      WRITE (1,302) J
 *****	0122'	LXI	D,[02 00 00 00]
 *****	0125'	LXI	H,S$
 *****	0128'	CALL	RIGHT$
@@ -231,49 +237,53 @@ Created: 10-Dec-81
 *****	0140'	LXI	D,302L
 *****	0143'	LXI	H,[01 00 00 00]
 *****	0146'	CALL	$W2
-121	  302 FORMAT (1X,'LEN ',I6)
+127	  302 FORMAT (1X,'LEN ',I6)
 *****	0149'	LXI	D,J
 *****	014C'	LXI	H,[01 00 00 00]
 *****	014F'	MVI	A,02
 *****	0151'	CALL	$I0
 *****	0154'	CALL	$ND
-122	C
-123	      CALL STRPUT(S$,'PART 1 ',7)
-124	      CALL STRPUT(T$,'PART 2 ',7)
+128	C
+129	C STRING CONCATENATE TEST
+130	C
+131	      CALL STRPUT(S$,'PART 1 ',7)
+132	      CALL STRPUT(T$,'PART 2 ',7)
 *****	0157'	LXI	B,[07 00 00 00]
 *****	015A'	LXI	D,H:0002
 *****	015D'	LXI	H,S$
 *****	0160'	CALL	STRPUT
-125	      CALL STRCAT(S$,T$)
+133	      CALL STRCAT(S$,T$)
 *****	0163'	LXI	B,[07 00 00 00]
 *****	0166'	LXI	D,H:0003
 *****	0169'	LXI	H,T$
 *****	016C'	CALL	STRPUT
-126	      CALL STRPRI(S$)
+134	      CALL STRPRI(S$)
 *****	016F'	LXI	D,T$
 *****	0172'	LXI	H,S$
 *****	0175'	CALL	STRCAT
-127	C
-128	      WRITE (1,303)
+135	C
+136	C STRING COMPARE TEST
+137	C
+138	      WRITE (1,303)
 *****	0178'	LXI	H,S$
 *****	017B'	CALL	STRPRI
 *****	017E'	LXI	D,303L
 *****	0181'	LXI	H,[01 00 00 00]
 *****	0184'	CALL	$W2
-129	  303 FORMAT (1X,'STRING COMPARE')
+139	  303 FORMAT (1X,'STRING COMPARE')
 *****	0187'	CALL	$ND
-130	      CALL STRPUT(S$,'A',1)
-131	      CALL STRPUT(T$,'A',1)
+140	      CALL STRPUT(S$,'A',1)
+141	      CALL STRPUT(T$,'A',1)
 *****	018A'	LXI	B,[01 00 00 00]
 *****	018D'	LXI	D,H:0004
 *****	0190'	LXI	H,S$
 *****	0193'	CALL	STRPUT
-132	      J = STRCMP(S$,T$)
+142	      J = STRCMP(S$,T$)
 *****	0196'	LXI	B,[01 00 00 00]
 *****	0199'	LXI	D,H:0005
 *****	019C'	LXI	H,T$
 *****	019F'	CALL	STRPUT
-133	      WRITE (1,304) J
+143	      WRITE (1,304) J
 *****	01A2'	LXI	D,T$
 *****	01A5'	LXI	H,S$
 *****	01A8'	CALL	STRCMP
@@ -281,19 +291,19 @@ Created: 10-Dec-81
 *****	01AE'	LXI	D,304L
 *****	01B1'	LXI	H,[01 00 00 00]
 *****	01B4'	CALL	$W2
-134	  304 FORMAT (1X,'A/A ',I6)
+144	  304 FORMAT (1X,'A/A ',I6)
 *****	01B7'	LXI	D,J
 *****	01BA'	LXI	H,[01 00 00 00]
 *****	01BD'	MVI	A,02
 *****	01BF'	CALL	$I0
 *****	01C2'	CALL	$ND
-135	      CALL STRPUT(T$,'B',1)
-136	      J = STRCMP(S$,T$)
+145	      CALL STRPUT(T$,'B',1)
+146	      J = STRCMP(S$,T$)
 *****	01C5'	LXI	B,[01 00 00 00]
 *****	01C8'	LXI	D,H:0006
 *****	01CB'	LXI	H,T$
 *****	01CE'	CALL	STRPUT
-137	      WRITE (1,305) J
+147	      WRITE (1,305) J
 *****	01D1'	LXI	D,T$
 *****	01D4'	LXI	H,S$
 *****	01D7'	CALL	STRCMP
@@ -301,24 +311,24 @@ Created: 10-Dec-81
 *****	01DD'	LXI	D,305L
 *****	01E0'	LXI	H,[01 00 00 00]
 *****	01E3'	CALL	$W2
-138	  305 FORMAT (1X,'A/B ',I6)
+148	  305 FORMAT (1X,'A/B ',I6)
 *****	01E6'	LXI	D,J
 *****	01E9'	LXI	H,[01 00 00 00]
 *****	01EC'	MVI	A,02
 *****	01EE'	CALL	$I0
 *****	01F1'	CALL	$ND
-139	      CALL STRPUT(S$,'B',1)
-140	      CALL STRPUT(T$,'A',1)
+149	      CALL STRPUT(S$,'B',1)
+150	      CALL STRPUT(T$,'A',1)
 *****	01F4'	LXI	B,[01 00 00 00]
 *****	01F7'	LXI	D,H:0007
 *****	01FA'	LXI	H,S$
 *****	01FD'	CALL	STRPUT
-141	      J = STRCMP(S$,T$)
+151	      J = STRCMP(S$,T$)
 *****	0200'	LXI	B,[01 00 00 00]
 *****	0203'	LXI	D,H:0008
 *****	0206'	LXI	H,T$
 *****	0209'	CALL	STRPUT
-142	      WRITE (1,306) J
+152	      WRITE (1,306) J
 *****	020C'	LXI	D,T$
 *****	020F'	LXI	H,S$
 *****	0212'	CALL	STRCMP
@@ -326,36 +336,150 @@ Created: 10-Dec-81
 *****	0218'	LXI	D,306L
 *****	021B'	LXI	H,[01 00 00 00]
 *****	021E'	CALL	$W2
-143	  306 FORMAT (1X,'B/A ',I6)
+153	  306 FORMAT (1X,'B/A ',I6)
 *****	0221'	LXI	D,J
 *****	0224'	LXI	H,[01 00 00 00]
 *****	0227'	MVI	A,02
 *****	0229'	CALL	$I0
 *****	022C'	CALL	$ND
-144	C
-145	C FORCE SSPACE ERROR, BY ATTEMPTING TO CREATE A STRING THAT
-146	C IS JUST TOO BIG.
-147	C
-148	      U$ = NEW$(5000)
-149	      END
-*****	022F'	LXI	H,[88 13 00 00]
-*****	0232'	CALL	NEW$
-*****	0235'	LXI	H,U$
-*****	0238'	CALL	$T1
-*****	023B'	CALL	$EX
-*****	023E'	02 00 00 00 
-*****	0242'	01 00 00 00 
-*****	0246'	00 00 00 00 
-*****	024A'	50 00 00 00 
-*****	024E'	0C 00 00 00 
-*****	0252'	00 04 00 00 
-*****	0256'	05 00 00 00 
-*****	025A'	14 00 00 00 
-*****	025E'	07 00 00 00 
-*****	0262'	88 13 00 00 
+154	C
+155	C STRPRI EMPTY STRING
+156	C
+157	      CALL STRPRI(EMPTY$)
+158	C
+159	C INSTR TEST
+160	C
+161	      CALL STRPUT(S$,'XYZ',3)
+*****	022F'	LXI	H,EMPTY$
+*****	0232'	CALL	STRPRI
+162	      CALL STRPUT(T$,'XYZZYXYZXYZ',11)
+*****	0235'	LXI	B,[03 00 00 00]
+*****	0238'	LXI	D,H:0009
+*****	023B'	LXI	H,S$
+*****	023E'	CALL	STRPUT
+163	      J = INSTR(1,T$,S$)
+*****	0241'	LXI	B,[0B 00 00 00]
+*****	0244'	LXI	D,H:000A
+*****	0247'	LXI	H,T$
+*****	024A'	CALL	STRPUT
+164	      I = 1
+165	      WRITE (1,307) J,I
+*****	024D'	LXI	B,S$
+*****	0250'	LXI	D,T$
+*****	0253'	LXI	H,[01 00 00 00]
+*****	0256'	CALL	INSTR
+*****	0259'	SHLD	J
+*****	025C'	LXI	H,0001
+*****	025F'	SHLD	I
+*****	0262'	LXI	D,307L
+*****	0265'	LXI	H,[01 00 00 00]
+*****	0268'	CALL	$W2
+166	  307 FORMAT (1X,'INSTR ',I6,' SHOULD BE ',I6)
+*****	026B'	LXI	B,I
+*****	026E'	LXI	D,J
+*****	0271'	LXI	H,[01 00 00 00]
+*****	0274'	MVI	A,03
+*****	0276'	CALL	$I0
+*****	0279'	CALL	$ND
+167	      CALL STRPUT(S$,'ABC',3)
+168	      J = INSTR(1,T$,S$)
+*****	027C'	LXI	B,[03 00 00 00]
+*****	027F'	LXI	D,H:000B
+*****	0282'	LXI	H,S$
+*****	0285'	CALL	STRPUT
+169	      I = 0
+170	      WRITE (1,307) J,I
+*****	0288'	LXI	B,S$
+*****	028B'	LXI	D,T$
+*****	028E'	LXI	H,[01 00 00 00]
+*****	0291'	CALL	INSTR
+*****	0294'	SHLD	J
+*****	0297'	LXI	H,0000
+*****	029A'	SHLD	I
+*****	029D'	LXI	D,307L
+*****	02A0'	LXI	H,[01 00 00 00]
+*****	02A3'	CALL	$W2
+171	      CALL STRPUT(S$,'XYZX',4)
+*****	02A6'	LXI	B,I
+*****	02A9'	LXI	D,J
+*****	02AC'	LXI	H,[01 00 00 00]
+*****	02AF'	MVI	A,03
+*****	02B1'	CALL	$I0
+*****	02B4'	CALL	$ND
+172	      J = INSTR(1,T$,S$)
+*****	02B7'	LXI	B,[04 00 00 00]
+*****	02BA'	LXI	D,H:000C
+*****	02BD'	LXI	H,S$
+*****	02C0'	CALL	STRPUT
+173	      I = 6
+174	      WRITE (1,307) J,I
+*****	02C3'	LXI	B,S$
+*****	02C6'	LXI	D,T$
+*****	02C9'	LXI	H,[01 00 00 00]
+*****	02CC'	CALL	INSTR
+*****	02CF'	SHLD	J
+*****	02D2'	LXI	H,0006
+*****	02D5'	SHLD	I
+*****	02D8'	LXI	D,307L
+*****	02DB'	LXI	H,[01 00 00 00]
+*****	02DE'	CALL	$W2
+175	      CALL STRPUT(S$,'YZXYZ',5)
+*****	02E1'	LXI	B,I
+*****	02E4'	LXI	D,J
+*****	02E7'	LXI	H,[01 00 00 00]
+*****	02EA'	MVI	A,03
+*****	02EC'	CALL	$I0
+*****	02EF'	CALL	$ND
+176	      J = INSTR(2,T$,S$)
+*****	02F2'	LXI	B,[05 00 00 00]
+*****	02F5'	LXI	D,H:000D
+*****	02F8'	LXI	H,S$
+*****	02FB'	CALL	STRPUT
+177	      I = 7
+178	      WRITE (1,307) J,I
+*****	02FE'	LXI	B,S$
+*****	0301'	LXI	D,T$
+*****	0304'	LXI	H,[02 00 00 00]
+*****	0307'	CALL	INSTR
+*****	030A'	SHLD	J
+*****	030D'	LXI	H,0007
+*****	0310'	SHLD	I
+*****	0313'	LXI	D,307L
+*****	0316'	LXI	H,[01 00 00 00]
+*****	0319'	CALL	$W2
+179	C
+180	C FORCE SSPACE ERROR, BY ATTEMPTING TO CREATE A STRING THAT
+181	C IS JUST TOO BIG.
+182	C
+183	      U$ = NEW$(5000)
+*****	031C'	LXI	B,I
+*****	031F'	LXI	D,J
+*****	0322'	LXI	H,[01 00 00 00]
+*****	0325'	MVI	A,03
+*****	0327'	CALL	$I0
+*****	032A'	CALL	$ND
+184	      END
+*****	032D'	LXI	H,[88 13 00 00]
+*****	0330'	CALL	NEW$
+*****	0333'	LXI	H,U$
+*****	0336'	CALL	$T1
+*****	0339'	CALL	$EX
+*****	033C'	02 00 00 00 
+*****	0340'	01 00 00 00 
+*****	0344'	00 00 00 00 
+*****	0348'	50 00 00 00 
+*****	034C'	0C 00 00 00 
+*****	0350'	00 04 00 00 
+*****	0354'	05 00 00 00 
+*****	0358'	14 00 00 00 
+*****	035C'	07 00 00 00 
+*****	0360'	03 00 00 00 
+*****	0364'	0B 00 00 00 
+*****	0368'	04 00 00 00 
+*****	036C'	88 13 00 00 
 
-Program Unit Length=0266 (614) Bytes
-Data Area Length=00A4 (164) Bytes
+Program Unit Length=0370 (880) Bytes
+Data Area Length=00DF (223) Bytes
 
 Subroutines Referenced:
 
@@ -365,7 +489,7 @@ MARK			RELEAS			STRCMP
 STRPUT			STRCPY			STRPRI			
 LEFT$			MID$			RIGHT$			
 $T1			$W2			$ND			
-STRCAT			$EX
+STRCAT			INSTR			$EX
 
 Variables:
 
@@ -374,7 +498,9 @@ V$	000D"		I	0011"		J	0013"
 M	0015"		EMPTY$	/STRCON/+0000	NOCHAR	/STRCON/+0004	
 H:0001	0017"		H:0002	0052"		H:0003	0059"		
 H:0004	0075"		H:0005	0076"		H:0006	0085"		
-H:0007	0094"		H:0008	0095"
+H:0007	0094"		H:0008	0095"		H:0009	00A4"		
+H:000A	00A7"		H:000B	00D3"		H:000C	00D6"		
+H:000D	00DA"
 
 COMMON	Length
 
@@ -384,8 +510,8 @@ Labels:
 
 $$L	0006'		300L	0023"		301L	0038"		
 302L	0044"		303L	0060"		304L	0077"		
-305L	0086"		306L	0096"
+305L	0086"		306L	0096"		307L	00B2"
 
 
-		RELEAS			STRCMP			
-STRPUT			
+	
+STR

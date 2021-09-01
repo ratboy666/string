@@ -16,12 +16,13 @@
 #f80 =strpri/l
 #f80 =strput/l
 #f80 =temp/l
+#f80 =instr/l
 #
 # manually build library:
 # (under zxcc, I use cut and paste to enter command. order does count)
 # lib80 strlib=
 # strpri,charat,left,mark,mid,new,releas,right,strcat,strcmp,strcpy
-# strget,strlen,stroff,strput,temp
+# strget,strlen,stroff,strput,temp,instr
 #
 # assume we have strlib built, build string.com test:
 # note bug in l80: strlib/s removes forlib request, so we have to be explicit
