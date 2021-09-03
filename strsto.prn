@@ -1,4 +1,4 @@
-FORTRAN-80 Ver. 3.44 Copyright 1978-1981 (C) By Microsoft -- Bytes: 37958
+FORTRAN-80 Ver. 3.44 Copyright 1978-1981 (C) By Microsoft -- Bytes: 27462
 Created: 10-Dec-81
 1	C **********************************************************************
 2	C *                                                                    *
@@ -16,16 +16,17 @@ Created: 10-Dec-81
 14	      INTEGER STRMAX,STRUSE
 15	      BYTE STRDAT(4096)
 16	      INTEGER N1,N2,NOCHAR
-17	      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
-18	      COMMON /STRCON/N1,N2,NOCHAR
-19	      DATA STRMAX,STRUSE/4096,1/
+17	      BYTE STRBUF(132)
+18	      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
+19	      COMMON /STRCON/N1,N2,NOCHAR,STRBUF
+20	      DATA STRMAX,STRUSE/4096,1/
 *****	/STRSTO/+0000	00 10 
 *****	/STRSTO/+0002	01 00 
-20	      DATA N1,N2,NOCHAR/0,0,257/
+21	      DATA N1,N2,NOCHAR/0,0,257/
 *****	/STRCON/+0000	00 00 
 *****	/STRCON/+0002	00 00 
 *****	/STRCON/+0004	01 01 
-21	      END
+22	      END
 
 Program Unit Length=0000 (0) Bytes
 Data Area Length=0001 (1) Bytes
@@ -36,20 +37,19 @@ Subroutines Referenced:
 Variables:
 
 STRMAX	/STRSTO/+0000	STRUSE	/STRSTO/+0002	STRDAT	/STRSTO/+0004	
-N1	/STRCON/+0000	N2	/STRCON/+0002	NOCHAR	/STRCON/+0004
+N1	/STRCON/+0000	N2	/STRCON/+0002	NOCHAR	/STRCON/+0004	
+STRBUF	/STRCON/+0006
 
 COMMON	Length
 
 /STRSTO/1004 (4100)
-/STRCON/0006 (6)
+/STRCON/008A (138)
 
 Labels:
 
 
 
 
-6,1/
-*****	/STRSTO/+0000	00 10 
+	00 10 
 *****	/STRSTO/+0002	01 00 
-20	      DATA N1,N2,NOCHAR/0,0,257/
-*****	/S
+21	      DA

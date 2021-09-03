@@ -1,0 +1,14 @@
+; CONOUT.MAC
+;
+; OUTPUT BYTE POINTED TO BY HL TO CONSOLE
+;
+        .8080
+        CSEG
+;
+        PUBLIC   CONOUT
+;
+CONOUT: MOV      E,M
+        MVI      C,2
+        JMP      5
+;
+        END
