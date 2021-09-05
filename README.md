@@ -21,3 +21,5 @@ I wrote a bit of code with STR$('/STRING/') to define temporary string constants
 assembler functions CONOUT and CONBFR to interface with BDOS. INPUT$ to get prompted input that can come
 from a SUB file with XSUB. Added BLANK routine to allow easier use of ENCODE/DECODE. Publish MKSTR$ as
 inverse of STROFF and STRLEN. Functions that I will use are now complete. Requests are welcome.
+
+The FORLIB.REL here has CONOUT, READER, PUNCH, INKEY. Document these functions (they are generic CPM)
