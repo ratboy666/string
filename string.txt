@@ -19,6 +19,12 @@ These are two integers, and are packed into a single REAL number.
 FORTRAN-80 EQUIVALENCE statement is used to cast the REAL into the
 two needed INTEGER values.
 
+We merge the Hanson technique, with a mark/release storage strategy
+from UCSD Pascal to provide a useful, performance oriented string
+library for Microsoft FORTRAN-80 (F80) on even the 2Mhz 8080. We
+also document some of the BDOS level console, punch and reader
+calls available in the FORTRAN-80 library (FORLIB.REL).
+
 The STRLEN() function returns the length field STROFF() returns the
 offset from the REAL. MKSTR() returns a REAL given integer offset
 and length. These calls can be avoided by using the EQUIVALENCE
@@ -35,12 +41,16 @@ RIGHT$ and MID$ return descriptors pointing to the source string;
 we ensure that middle of string cannot be assigned ("mostly" invariant).
 The only string modification is string concatenate (STRCAT). But, the
 RIGHT$, LEFT$ and MID$ functions work very quickly, as they need only
-create a new descriptor, with no data being copied.
+create a new descriptor, with no data being copied. Since substring
+functions do not use additional string storage, less storage in
+the STRDAT is needed. Functions that consume new STRDAT storage are
+NEW$, TEMP$, STR$, CMDLN$ and INPUT$. NEW$ is the only function that
+returns PERMANENT space -- the other functions return TEMPORARY space.
 
 The offset of a string is an index into STRDAT. This is usually in
 STRDAT storage units. The length of a string is always in characters.
 The functions in STRLIB should be optimized for the machine they are
-on. The F80 implementation uses BYTE as the STRDAT type. But, the
+on. The FORTRAN-80 implementation uses BYTE as the STRDAT type. But, the
 range of a BYTE is -128..127. For compares, etc. 128 is added to the
 character value if it is negative. This brings the range to 0..255.
 Note that this drives the choice of 257 for "no character".
@@ -56,11 +66,11 @@ STRING.FOR is an example of the use of STRLIB:
 
 will compile and link STRING.FOR. STRSTO.REL contains the definition
 of the dynamic string storage area. STRSTO.FOR defines it as 4096
-bytes. More or less storage can be use by editing STRSTO.FOR, compiling
-it and linking the new STRSTO.REL. STRSTO.REL must be linked before
-STRLIB.REL is searched. Note that we have to be explicit about FORLIB,
-because bringing in STRLIB somehow overrides L80 automatic request.
-(I consider this a bug in L80).
+bytes (default). More or less storage can be use by editing STRSTO.FOR,
+compiling it and linking the new STRSTO.REL. STRSTO.REL must be linked
+before STRLIB.REL is searched. Note that we have to be explicit about
+FORLIB, because bringing in STRLIB somehow overrides L80 automatic
+request. (I consider this a bug in L80).
 
 The STRGET and STRPUT routines, with the STRLEN() function, allow the
 use of STRLIB with other string handling routines. The string data
@@ -69,22 +79,22 @@ controlled by other software. The STRSTO common storage can be adjusted
 in size, and used as generic storage with STRGET and STRPUT. STRLEN
 again is used to determine the amount of data used in the STRDAT array.
 This provides a mechanism similar to dynamic storage, but uses a
-MARK/RELEAS stack discipline. The advantage to MARK/RELEASE is that
+MARK/RELEAS stack discipline. The advantage to MARK/RELEAS is that
 this is a very fast method for allocating and returning storage.
-It does require more care than a malloc/free approach, but with
+It does require more care than a malloc()/free() approach, but with
 only 64K of available memory and a 2Mhz processor, this is not a
 bad thing.
 
-Microsoft FORTRAN-80 (F80) supports ENCODE and DECODE. ENCODE is
-WRITE to a memory buffer, and DECODE is READ. We want to be able
-to use these statements in our programs. However, the buffer is
+Microsoft FORTRAN-80 supports ENCODE and DECODE. ENCODE is a WRITE
+to a memory buffer, and DECODE is READ. We want to be able to
+exploit these statements in our programs. However, the buffer is
 not filled with spaces, and the number of characters output is not
 returned. The exact number of characters in the buffer can be determined
 from the FORMAT, but BLANKing the buffer first is easier and allows us
-to edit FORMAT statements without as much hassle. We also provide a 
+to edit FORMAT statements without as much care needed. We also provide a 
 TRIM$ function to remove leading and trailing blanks from a string.
 
-The STR$ function is used if we want to work with a string constant
+The STR$ function may be used if we want to work with a string constant
 in an expression. For example:
 
   I = STRCMP(S$, STR$('/VAL/'))
@@ -94,7 +104,7 @@ in temporary space, MARK and RELEAS are used to reclaim the storage
 used. To avoid having the count the number of characters in the string
 constant, the first character is a delimeter. The characters until
 the closing delimiter are used as the string value. STR$ may also be
-used with STRCPY to assign a string, STRCAT to append a constant string.
+used with STRCPY to assign a string; STRCAT to append a constant string.
 
 The MKSTR$ function returns a string given a desired offset and length.
 MKSTR$(STROFF(S$),STRLEN(S$)) returns S$. If STRLEN(S$) is .GT. 0:
@@ -109,11 +119,15 @@ Routines ======================================================================
       EXTERNAL STRSTO,STROFF,STRLEN,NEW$,TEMP$,MARK,RELEAS,STRCMP
       EXTERNAL STRPUT,STRGET,STRCPY,STRPRI,LEFT$,MID$,RIGHT$,INSTR
       EXTERNAL STR$,CMDLN$,BLANK,TRIM$,MKSTR$,CHARAT,STRCAT,INPUT$
-      EXTERNAL CONOUT,CONRBF
+      EXTERNAL CONOUT,CONRBF,READER,PUNCH,INKEY
 
-      INTEGER STROFF,STRLEN,MARK,STRCMP,INSTR,CHARAT
+      INTEGER STROFF,STRLEN,MARK,STRCMP,INSTR,CHARAT,READER,INKEY
       REAL NEW$,TEMP$,LEFT$,MID$,RIGHT$,STR$,CMDLN$,TRIM$,MKSTR$
       REAL INPUT$
+
+CONOUT, READER, PUNCH and INKEY are part of FORLIB.REL. They are
+documented here. The FORTRAN-80 manual doesn't mention these
+functions, but they are provided in TTYDRV.MAC.
 
 
 Detail ========================================================================
@@ -249,4 +263,15 @@ SUBROUTINE CONOUT(C)         Access BDOS function 2 (Console Out)
 
 SUBROUTINE CONRBF(BUF)       Access BDOS function 10 (Console Read Buffer)
     BYTE BUF(1)
-                 
+
+SUBROUTINE PUNCH(C)          Send character to PTP
+    BYTE C                   Access BDOS function 4
+
+FUNCTION READER(DUMMY)       Read character from PTR
+    BYTE READER              Access BDOS function 3
+    INTEGER DUMMY
+
+FUNCTION INKEY(I)            Get from keyboard. I=0, status (0=no char)
+    BYTE INKEY               I=1, wait (return char)
+    INTEGER I                Access BDOS function 6, E=0FFH
+               
