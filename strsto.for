@@ -11,12 +11,20 @@ C *                                                                    *
 C **********************************************************************
 C
       BLOCK DATA STRSTO
-      INTEGER STRMAX,STRUSE
+C
+      INTEGER STRMAX, STRUSE
       BYTE STRDAT(4096)
-      INTEGER N1,N2,NOCHAR
+C
+      INTEGER EMPTY$(2), E$OFF, E$LEN
+      INTEGER NOCHAR
       BYTE STRBUF(132)
-      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
-      COMMON /STRCON/N1,N2,NOCHAR,STRBUF
-      DATA STRMAX,STRUSE/4096,1/
-      DATA N1,N2,NOCHAR/0,0,257/
+C
+      COMMON /STRSTO/ STRMAX, STRUSE, STRDAT
+      COMMON /STRCON/ EMPTY$, NOCHAR, STRBUF
+C
+      EQUIVALENCE (EMPTY$(1), E$OFF), (EMPTY$(2), E$LEN)
+C
+      DATA STRMAX, STRUSE /4096, 1/
+      DATA E$OFF, E$LEN, NOCHAR /0, 0, 257/
       END
+

@@ -7,16 +7,15 @@ C * LENGTH 0. SEE MARK AND RELEAS FOR DETAILS ON STORAGE MANAGEMENT.   *
 C *                                                                    *
 C **********************************************************************
 C
-      FUNCTION TEMP$(N)
-      REAL TEMP$
+      REAL FUNCTION TEMP$(N)
       INTEGER N
 C
       REAL S$
-      INTEGER IS$(2),S$OFF,S$LEN
-      INTEGER STRMAX,STRUSE
-      BYTE STRDAT(1)
-      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
-      EQUIVALENCE (S$,IS$(1)),(IS$(1),S$OFF),(IS$(2),S$LEN)
+      INTEGER IS$(2), S$OFF, S$LEN
+C
+      INCLUDE STRING.INC
+C
+      EQUIVALENCE (S$, IS$(1)), (IS$(1), S$OFF), (IS$(2), S$LEN)
 C
       S$OFF = STRMAX - N
       S$LEN = 0
@@ -25,3 +24,4 @@ C
       TEMP$ = S$
       RETURN
       END
+

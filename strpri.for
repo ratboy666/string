@@ -8,25 +8,23 @@ C * USE STRPRI AS AN EXAMPLE.                                          *
 C *                                                                    *
 C **********************************************************************
 C
-      SUBROUTINE STRPRI(S$)
+      SUBROUTINE STRPRI(LUN, S$)
+      INTEGER LUN
       REAL S$
 C
-      EXTERNAL STRGET,STRLEN
-      INTEGER STRLEN
+      INTEGER I, J
 C
-      INTEGER I,J
-      REAL EMPTY$
-      INTEGER NOCHAR
-      BYTE STRBUF(132)
-      COMMON /STRCON/EMPTY$,NOCHAR,STRBUF
+      INCLUDE STRING.INC
 C
       J = STRLEN(S$)
-      IF (J .EQ. 0) GO TO 1
-      CALL STRGET(S$,STRBUF,132)
-      WRITE (1,300) (STRBUF(I),I=1,J)
-  300 FORMAT(1X,132A1)
+      IF (J .LE. 0) GO TO 1
+      IF (J .GT. 132) J = 132
+      CALL STRGET(S$, STRBUF, J)
+      WRITE (LUN, 300) (STRBUF(I), I = 1, J)
+  300 FORMAT (1X, 132A1)
       RETURN
-    1 WRITE (1,301)
-  301 FORMAT(1X)
+    1 WRITE (LUN, 301)
+  301 FORMAT (1X)
       RETURN
       END
+

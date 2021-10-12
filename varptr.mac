@@ -1,0 +1,49 @@
+; **********************************************************************
+; *                                                                    *
+; * VARPTR(X) - RETURN INTEGER ADDRESS OF X                            *
+; *                                                                    *
+; * VARPTR IS USEFUL TO DETERMINE MEMORY OFFSETS. FOR EXAMPLE, STRDAT  *
+; * IS THE BYTE ARRAY USED FOR STRING STORAGE. BYTE B IS AN ARBITARY   *
+; * BYTE VARIABLE:                                                     *
+; *                                                                    *
+; *   EXTERNAL VARPTR                                                  *
+; *   INTEGER VARPTR                                                   *
+; *   I = VARPTR(B) - VARPTR(STRDAT(1)) + 1                            *
+; *                                                                    *
+; * I IS THE INDEX OF B, RELATIVE TO STRDAT. IN OTHER WORDS:           *
+; *                                                                    *
+; * STRDAT(I) IS EQUIVALENT TO B                                       *
+; *                                                                    *
+; * NOTE THAT I MAY BE NEGATIVE, OR 0. FOR THIS TO WORK, RANGE         *
+; * CHECKING IS NOT ALLOWED.                                           *
+; *                                                                    *
+; * THIS ALLOWS PUTTING NEW$ (OR TEMP$) STORAGE ANYWHERE IN MEMORY.    *
+; * BUILD A DESCRIPTOR WITH MKSTR$(OFFSET, LENGTH) WITH OFFSET FROM    *
+; * THE VARPTR COMPUTATION. THIS PERMITS STRCPY TO GET DATA FROM       *
+; * ANYWHERE -- NOTE THAT PUTSTR AND GETSTR ARE MORE READABLE. BUT,    *
+; * USING THESE ADDITIONAL FUNCTIONS, WE CAN CREATE 'CHEAP' STRINGS.   *
+; * CONSIDER:                                                          *
+; *                                                                    *
+; *  BYTE S(12)                                                        *
+; *  DATA S/'H','E','L','L','O',',',' ','W','O','R','L','D'/           *
+; *  S$ = MKSTR$(VARPTR(S)-VARPTR(STRDAT(1))+1,12)                     *
+; *                                                                    *
+; * WHERE THE STRING DATA IS NOT COPIED AT ALL.                        *
+; *                                                                    *
+; * FORTRAN IV HAS NO CONCEPT OF POINTERS, SO VARPTR CAN BE COMPARED   *
+; * WITH VARPTR, PASSED AS AN ARRAY TO ROUTINES, OR USED AS AN         *
+; * ARGUMENT TO PEEK/POKE. MBASIC HAS THE SAME FUNCTION, WITH THE SAME *
+; * RESTRICTIONS. NOTE THAT ALL PARAMETERS ARE PASSED BY REFERENCE IN  *
+; * FORTRAN-80                                                         *
+; *                                                                    *
+; **********************************************************************
+;
+         .8080
+         CSEG
+;
+         PUBLIC   VARPTR
+;
+VARPTR:  RET
+;
+         END
+

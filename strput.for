@@ -12,26 +12,27 @@ C *   CALL STRPUT(S$,'HELLO, WORLD',12)                                *
 C *                                                                    *
 C **********************************************************************
 C
-      SUBROUTINE STRPUT(S$,D,N)
+      SUBROUTINE STRPUT(S$, D, N)
       REAL S$
       INTEGER N
       BYTE D(N)
 C
-      INTEGER I,J
+      INTEGER I, J
       REAL D$
-      INTEGER ID$(2),D$OFF,D$LEN
-      INTEGER STRMAX,STRUSE
-      BYTE STRDAT(1)
-      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
-      EQUIVALENCE (D$,ID$(1)),(ID$(1),D$OFF),(ID$(2),D$LEN)
+      INTEGER ID$(2), D$OFF, D$LEN
+C
+      INCLUDE STRING.INC
+C
+      EQUIVALENCE (D$, ID$(1)), (ID$(1), D$OFF), (ID$(2), D$LEN)
 C
       D$ = S$
       D$LEN = N
       IF (N .LE. 0) GO TO 2
-      DO 1 I = 1,N
+      DO 1 I = 1, N
         J = D$OFF + I - 1
         STRDAT(J) = D(I)
     1 CONTINUE
     2 S$ = D$
       RETURN
       END
+
