@@ -1,19 +1,14 @@
 C **********************************************************************
 C *                                                                    *
-C * BLANK - FILL BUFFER WITH SPACES                                    *
+C * STRCLR - CLEAR PERMANENT STRING STORAGE                            *
 C *                                                                    *
 C **********************************************************************
 C
-      SUBROUTINE BLANK(BUF, N)
-      INTEGER N
-      BYTE BUF(N)
+      SUBROUTINE STRCLR
 C
-      INTEGER I
+      INCLUDE STRING.INC
 C
-      IF (N .LE. 0) RETURN
-      DO 1 I = 1, N
-        BUF(I) = ' '
-    1 CONTINUE
+      STRUSE = 1
       RETURN
       END
 

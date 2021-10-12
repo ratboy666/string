@@ -1,0 +1,41 @@
+; **********************************************************************
+; *                                                                    *
+; * $DADSP(I) - RETURN SP + I                                          *
+; *                                                                    *
+; **********************************************************************
+;
+         .8080
+         CSEG
+;
+         PUBLIC   $DADSP
+;
+; LOAD HL INDIRECT FROM HL
+;
+LHLI     MACRO
+         MOV      A,M
+         INX      H
+         MOV      H,M
+         MOV      L,A
+         ENDM
+;
+; $DADSP(I) - RETURN SP + I
+;             USES SP OF CALLER
+;
+; THE INTENT HERE IS THAT:
+;
+;   CALL $SPHL($DADSP(0))
+;
+; SHOULD DO NOTHING. THAT SHOULD BE THE SAME AS:
+;
+;   LXI H,0
+;   DAD SP
+;   SPHL
+;
+$DADSP:  LHLI
+         DAD      SP		 ; + SP
+         INX      H              ; + 2
+         INX      H
+         RET
+;
+         END
+

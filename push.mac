@@ -1,17 +1,22 @@
 ; **********************************************************************
 ; *                                                                    *
-; * CONOUT(C) - OUTPUT BYTE CONSOLE                                    *
+; * $PUSH(I) - PUSH INTEGER I TO STACK                                 *
 ; *                                                                    *
 ; **********************************************************************
 ;
          .8080
          CSEG
 ;
-         PUBLIC   CONOUT
+         PUBLIC   $PUSH
 ;
-CONOUT:  MOV      E,M
-         MVI      C,2
-         JMP      5
+; $PUSH(I) - PUSH I TO STACK
+;
+$PUSH:   MOV      C,M
+         INX      H
+         MOV      B,M
+         POP      H
+         PUSH     B
+         PCHL
 ;
          END
 

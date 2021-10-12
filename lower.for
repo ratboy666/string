@@ -1,19 +1,14 @@
 C **********************************************************************
 C *                                                                    *
-C * BLANK - FILL BUFFER WITH SPACES                                    *
+C * LOWER - CONVERT C TO LOWER-CASE, IF IT IS UPPER-CASE               *
 C *                                                                    *
 C **********************************************************************
 C
-      SUBROUTINE BLANK(BUF, N)
-      INTEGER N
-      BYTE BUF(N)
+      INTEGER FUNCTION LOWER(C)
+      INTEGER C
 C
-      INTEGER I
-C
-      IF (N .LE. 0) RETURN
-      DO 1 I = 1, N
-        BUF(I) = ' '
-    1 CONTINUE
+      LOWER = C
+      IF (C .GE. 65 .AND. C .LE. 90) LOWER = LOWER - 65 + 97
       RETURN
       END
 

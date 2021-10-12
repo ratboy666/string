@@ -13,17 +13,17 @@ C * T$ NOW HAS 'O,'                                                    *
 C *                                                                    *
 C **********************************************************************
 C
-      FUNCTION MID$(S$,N,M)
-      REAL MID$
+      REAL FUNCTION MID$(S$, N, M)
       REAL S$
-      INTEGER N,M
+      INTEGER N, M
 C
       REAL D$
-      INTEGER ID$(2),D$OFF,D$LEN
+      INTEGER ID$(2), D$OFF, D$LEN
       REAL R$
-      INTEGER IR$(2),R$OFF,R$LEN
-      EQUIVALENCE (D$,ID$(1)),(ID$(1),D$OFF),(ID$(2),D$LEN)
-      EQUIVALENCE (R$,IR$(1)),(IR$(1),R$OFF),(IR$(2),R$LEN)
+      INTEGER IR$(2), R$OFF, R$LEN
+C
+      EQUIVALENCE (D$, ID$(1)), (ID$(1), D$OFF), (ID$(2), D$LEN)
+      EQUIVALENCE (R$, IR$(1)), (IR$(1), R$OFF), (IR$(2), R$LEN)
 C
       D$ = S$
       R$ = S$
@@ -32,10 +32,11 @@ C
       IF (N .GE. D$LEN) GO TO 1
       IF (M .LE. 0) GO TO 1
       IF (D$LEN .LE. 0) GO TO 1
-      R$OFF = N
+      R$OFF = R$OFF + N - 1
       R$LEN = M
-      IF (R$OFF + M - 1 .LE. D$LEN) GO TO 1
-      R$LEN = D$LEN - R$OFF
+      IF (N + M - 1 .LE. D$LEN) GO TO 1
+      R$LEN = D$LEN - N + 1
     1 MID$ = R$
       RETURN
       END
+

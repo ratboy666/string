@@ -1,0 +1,30 @@
+; **********************************************************************
+; *                                                                    *
+; * $SPHL(I) - SET SP TO I                                             *
+; *                                                                    *
+; **********************************************************************
+;
+         .8080
+         CSEG
+;
+         PUBLIC   $SPHL
+;
+; LOAD HL INDIRECT FROM HL
+;
+LHLI     MACRO
+         MOV      A,M
+         INX      H
+         MOV      H,M
+         MOV      L,A
+         ENDM
+;
+; $SPHL(I) - SET SP TO I
+;
+$SPHL:   POP      D              ; RETURN ADDRESS
+         LHLI                    ; PARAMETER
+         SPHL                    ; TO SP
+         XCHG                    ; GO TO RETURN ADDRESS
+         PCHL
+;
+         END
+

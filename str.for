@@ -2,33 +2,36 @@ C **********************************************************************
 C *                                                                    *
 C * STR$ - TEMPORARY STRING                                            *
 C *                                                                    *
-C * RETURN STRING WITH VALUE IN TEMPORARY SPACE                        *
+C * RETURN STRING WITH VALUE IN TEMPORARY SPACE. STRING IS DELIMITED.  *
+C * AND  IS USED FOR CONTROL (^^=^). EG. '/^M^J*/'                   *
 C *                                                                    *
 C **********************************************************************
 C
-      FUNCTION STR$(D)
-      REAL STR$
-      BYTE D(80)
+      REAL FUNCTION STR$(D)
+      BYTE D(1)
 C
-      EXTERNAL TEMP$,STRPUT
-      REAL TEMP$
-C
-      INTEGER I,N
-      BYTE C
+      INTEGER I, N
+      BYTE C, B
       REAL S$
-      REAL EMPTY$
-      INTEGER NOCHAR
-      BYTE STRBUF(132)
-      COMMON /STRCON/EMPTY$,NOCHAR,STRBUF
+C
+      INCLUDE STRING.INC
 C
       C = D(1)
-      DO 1 I=2,132
-        IF (C .EQ. D(I)) GO TO 2
-        STRBUF(I-1) = D(I)
-    1 CONTINUE
-    2 N = I - 2
-      S$ = TEMP$(N)
-      CALL STRPUT(S$,STRBUF,N)
+      N = 0
+      DO 2 I = 2, 132
+        B = D(I)
+        IF (B .EQ. C) GO TO 3
+        IF (B .NE. 94) GO TO 1
+        I = I + 1
+        B = D(I)
+        IF (B .EQ. 94) GO TO 1
+        B = B - 64
+    1   N = N + 1
+        STRBUF(N) = B
+    2 CONTINUE
+    3 S$ = TEMP$(N)
+      CALL STRPUT(S$, STRBUF, N)
       STR$ = S$
       RETURN
       END
+

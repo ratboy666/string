@@ -1,19 +1,15 @@
 C **********************************************************************
 C *                                                                    *
-C * BLANK - FILL BUFFER WITH SPACES                                    *
+C * ISALFA - RETURN .TRUE. IF ALPHABETIC                               *
 C *                                                                    *
 C **********************************************************************
 C
-      SUBROUTINE BLANK(BUF, N)
-      INTEGER N
-      BYTE BUF(N)
+      LOGICAL FUNCTION ISALFA(C)
+      INTEGER C
 C
-      INTEGER I
-C
-      IF (N .LE. 0) RETURN
-      DO 1 I = 1, N
-        BUF(I) = ' '
-    1 CONTINUE
+      ISALFA = .FALSE.
+      IF (C .GE. 97 .AND. C .LE. 122) ISALFA = .TRUE.
+      IF (C .GE. 65 .AND. C .LE. 90) ISALFA = .TRUE.
       RETURN
       END
 

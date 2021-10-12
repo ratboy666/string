@@ -1,15 +1,17 @@
-; CONRBF.MAC
+; **********************************************************************
+; *                                                                    *
+; * CONRBF(BUF) - CONSOLE READ BUFFER                                  *
+; *                                                                    *
+; **********************************************************************
 ;
-; READ CONSOLE BUFFER
+         .8080
+         CSEG
 ;
-        .8080
-        CSEG
+         PUBLIC   CONRBF
 ;
-        PUBLIC   CONRBF
+CONRBF:  XCHG
+         MVI      C,10
+         JMP      5
 ;
-CONRBF: MOV      E,L
-        MOV      D,H
-        MVI      C,10
-        JMP      5
-;
-        END
+         END
+

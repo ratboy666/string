@@ -8,17 +8,16 @@ C * SHARE THE SAME STORAGE SPACE. THE STRING RETURNED IS OF LENGTH 0.  *
 C *                                                                    *
 C **********************************************************************
 C
-      FUNCTION NEW$(N)
-      REAL NEW$
+      REAL FUNCTION NEW$(N)
       INTEGER N
 C
       INTEGER I
       REAL S$
-      INTEGER IS$(2),S$OFF,S$LEN
-      INTEGER STRMAX,STRUSE
-      BYTE STRDAT(1)
-      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
-      EQUIVALENCE (S$,IS$(1)),(IS$(1),S$OFF),(IS$(2),S$LEN)
+      INTEGER IS$(2), S$OFF, S$LEN
+C
+      INCLUDE STRING.INC
+C
+      EQUIVALENCE (S$, IS$(1)), (IS$(1), S$OFF), (IS$(2), S$LEN)
 C
       I = STRUSE
       STRUSE = STRUSE + N
@@ -28,3 +27,4 @@ C
       NEW$ = S$ 
       RETURN
       END
+

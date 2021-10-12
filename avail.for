@@ -1,19 +1,15 @@
 C **********************************************************************
 C *                                                                    *
-C * BLANK - FILL BUFFER WITH SPACES                                    *
+C * AVAIL - MEMORY AVAILABLE FOR ALLOCATION                            *
 C *                                                                    *
 C **********************************************************************
 C
-      SUBROUTINE BLANK(BUF, N)
-      INTEGER N
-      BYTE BUF(N)
+      INTEGER FUNCTION AVAIL(DUMMY)
+      INTEGER DUMMY
 C
-      INTEGER I
+      INCLUDE STRING.INC
 C
-      IF (N .LE. 0) RETURN
-      DO 1 I = 1, N
-        BUF(I) = ' '
-    1 CONTINUE
+      AVAIL = STRMAX - STRUSE + 1
       RETURN
       END
 

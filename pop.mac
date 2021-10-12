@@ -1,0 +1,56 @@
+; **********************************************************************
+; *                                                                    *
+; * $POP(DUMMY) - POP INTEGER FROM STACK                               *
+; *                                                                    *
+; * $POP IS USEFUL IF A LEVEL OF STACK NEEDS TO BE REMOVED.            *
+; * CONSIDER:                                                          *
+; *                                                                    *
+; *   ASSIGN 1 TO I        -- STORE ADDRESS OF LABEL 1 TO I            *
+; *   CALL F(I)            -- PASS I TO SUBROUTINE F                   *
+; * 1 ...                                                              *
+; *                                                                    *
+; *   SUBROUTINE F(I)                                                  *
+; *   EXTERNAL $POP                                                    *
+; *   INTEGER $POP                                                     *
+; *   JUNK = $POP(0)       -- REMOVE RETURN ADDRESS                    *
+; *   GO TO I              -- GO TO ASSIGNED LABEL I                   *
+; *   END                                                              * 
+; *                                                                    *
+; * THIS CAN BE USED AS A REPLACEMENT FOR MULTIPLE RETURNS IN          *
+; * FORTRAN IV THAT ARE MISSING IN FORTRAN-80                          *
+; *                                                                    *
+; * $DADSP AND $SPHL CAN BE USED TO IMPLEMENT CO-ROUTINES OR           *
+; * CO-OPERATIVE MULTI-TASKING. THESE CAN ALSO BE USED TO ALLOCATE     *
+; * STACK STORAGE, WHEN USED WITH $POP.                                *
+; *                                                                    *
+; * AGAIN, CONSIDER:                                                   *
+; *                                                                    *
+; *   IRET = $POP(0)       -- POP RETURN ADDRESS                       *
+; *   IOLDSP = $DADSP(0)   -- SAVE OLD STACK POINTER                   *
+; *   $SPHL($DADSP(-128))  -- ALLOCATE 128 BYTES ON STACK              *
+; *   ISTOR = $DADSP(0)    -- BASE OF STACK STORAGE                    *
+; *   CALL $PUSH(IRET)     -- PUT BACK RETURN ADDRESS                  *
+; *                                                                    *
+; * NOTE THAT ISTOR IS A POINTER LIKE VARPTR RETURNS. THIS CAN BE USED *
+; * WITH PEEK/POKE AND AS A PARAMETER. SINCE THE STACK GROWS DOWN, THE *
+; * ISTOR IS THE BASE OF THE STORAGE ON THE STACK.                     *
+; *                                                                    *
+; **********************************************************************
+;
+         .8080
+         CSEG
+;
+         PUBLIC   $POP
+;
+; $POP(DUMMY) - RETURN TOP OF STACK AND REMOVE
+;
+; CONSIDER CALL $SPHL($DADSP(2)) WHICH IS EQUIVALENT BUT
+; DOES NOT RETURN TOP OF STACK VALUE.
+;
+$POP:    POP      D		 ; RETURN ADDRESS
+         POP      H              ; TOP OF STACK VALUE
+         PUSH     D
+         RET
+;
+         END
+

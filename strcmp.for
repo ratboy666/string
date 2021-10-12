@@ -12,20 +12,19 @@ C * DATA).                                                             *
 C *                                                                    *
 C **********************************************************************
 C
-      FUNCTION STRCMP(S1$,S2$)
-      INTEGER STRCMP
-      REAL S1$,S2$
+      INTEGER FUNCTION STRCMP(S1$, S2$)
+      REAL S1$, S2$
 C
-      INTEGER I,J,C1,C2
+      INTEGER I, J, C1, C2
       REAL A$
-      INTEGER IA$(2),A$OFF,A$LEN
+      INTEGER IA$(2), A$OFF, A$LEN
       REAL B$
-      INTEGER IB$(2),B$OFF,B$LEN
-      INTEGER STRMAX,STRUSE
-      BYTE STRDAT(1)
-      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
-      EQUIVALENCE (A$,IA$(1)),(IA$(1),A$OFF),(IA$(2),A$LEN)
-      EQUIVALENCE (B$,IB$(1)),(IB$(1),B$OFF),(IB$(2),B$LEN)
+      INTEGER IB$(2), B$OFF, B$LEN
+C
+      INCLUDE STRING.INC
+C
+      EQUIVALENCE (A$, IA$(1)), (IA$(1), A$OFF), (IA$(2), A$LEN)
+      EQUIVALENCE (B$, IB$(1)), (IB$(1), B$OFF), (IB$(2), B$LEN)
 C
       A$ = S1$
       B$ = S2$
@@ -37,16 +36,14 @@ C EQUAL
 C IF BOTH STRINGS ARE EMPTY, THEY ARE EQUAL
       IF (A$LEN .EQ. 0 .AND. B$LEN .EQ. 0) RETURN
       STRCMP = 1
-      DO 1 I = 1,A$LEN
+      DO 1 I = 1, A$LEN
 C STRINGS HAVE BEEN EQUAL FROM 1..I, IF I EXCEEDS S2$ LENGTH, S1$ IS
 C LARGER
         IF (I .GT. B$LEN) RETURN
         J = A$OFF + I - 1
-        C1 = STRDAT(J)
-        IF (C1 .LT. 0) C1 = C1 + 128
+        C1 = ICHAR(STRDAT(J))
         J = B$OFF + I - 1
-        C2 = STRDAT(J)
-        IF (C2 .LT. 0) C2 = C2 + 128
+        C2 = ICHAR(STRDAT(J))
         J = C1 - C2
         IF (J .EQ. 0) GO TO 1
 C C1 - C2 NOT ZERO MEANS THE STRINGS ARE NOT EQUAL, C1 - C2 GIVES
@@ -61,3 +58,4 @@ C WE RAN OUT OF CHARACTERS IN S1$, SO S2$ IS LARGER.
       STRCMP = -1
       RETURN
       END
+

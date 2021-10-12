@@ -2,27 +2,22 @@ C **********************************************************************
 C *                                                                    *
 C * CHARAT - CHARACTER AT                                              *
 C *                                                                    *
-C * GETS A SINGLE CHARACTER FROM STRING S$. RETURNS NOCHAR INDEX I IS  *
-C * NOT IN THE STRING. RETURNS -128..128, OR 257                       *
+C * GETS A SINGLE CHARACTER FROM STRING S$. RETURNS NOCHAR IF INDEX I  *
+C * IS NOT IN THE STRING. RETURNS 0..255M, OR 257                      *
 C *                                                                    *
 C **********************************************************************
 C
-      FUNCTION CHARAT(S$,I)
-      INTEGER CHARAT
+      INTEGER FUNCTION CHARAT(S$, I)
       REAL S$
       INTEGER I
 C
       INTEGER J
       REAL D$
-      INTEGER ID$(2),D$OFF,D$LEN
-      REAL EMPTY$
-      INTEGER NOCHAR
-      INTEGER STRMAX,STRUSE
-      BYTE STRDAT(1)
-      BYTE STRBUF(132)
-      COMMON /STRCON/EMPTY$,NOCHAR,STRBUF
-      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
-      EQUIVALENCE (D$,ID$(1)),(ID$(1),D$OFF),(ID$(2),D$LEN)
+      INTEGER ID$(2), D$OFF, D$LEN
+C
+      INCLUDE STRING.INC
+C
+      EQUIVALENCE (D$, ID$(1)), (ID$(1), D$OFF), (ID$(2), D$LEN)
 C
       D$ = S$
       CHARAT = NOCHAR
@@ -30,6 +25,7 @@ C
       IF (I .LE. 0) GO TO 1
       IF (I .GT. D$LEN) GO TO 1
       J = D$OFF + I - 1
-      CHARAT = STRDAT(J)
+      CHARAT = ICHAR(STRDAT(J))
     1 RETURN
       END
+

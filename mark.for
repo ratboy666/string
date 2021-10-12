@@ -21,14 +21,12 @@ C * RELEASES THE STORAGE.                                              *
 C *                                                                    *
 C **********************************************************************
 C
-      FUNCTION MARK(DUMMY)
-      INTEGER MARK
+      INTEGER FUNCTION MARK(DUMMY)
       INTEGER DUMMY
 C
-      INTEGER STRMAX,STRUSE
-      BYTE STRDAT(1)
-      COMMON /STRSTO/STRMAX,STRUSE,STRDAT
+      INCLUDE STRING.INC
 C
       MARK = STRMAX
       RETURN
       END
+

@@ -1,19 +1,13 @@
 C **********************************************************************
 C *                                                                    *
-C * BLANK - FILL BUFFER WITH SPACES                                    *
+C * CHAR - INTEGER TO CHAR                                             *
 C *                                                                    *
 C **********************************************************************
 C
-      SUBROUTINE BLANK(BUF, N)
-      INTEGER N
-      BYTE BUF(N)
-C
+      BYTE FUNCTION CHAR(I)
       INTEGER I
 C
-      IF (N .LE. 0) RETURN
-      DO 1 I = 1, N
-        BUF(I) = ' '
-    1 CONTINUE
+      CHAR = I
       RETURN
       END
 

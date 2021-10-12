@@ -1,19 +1,14 @@
 C **********************************************************************
 C *                                                                    *
-C * BLANK - FILL BUFFER WITH SPACES                                    *
+C * ISNUM - RETURN .TRUE. IF NUMERIC                                   *
 C *                                                                    *
 C **********************************************************************
 C
-      SUBROUTINE BLANK(BUF, N)
-      INTEGER N
-      BYTE BUF(N)
+      LOGICAL FUNCTION ISNUM(C)
+      INTEGER C
 C
-      INTEGER I
-C
-      IF (N .LE. 0) RETURN
-      DO 1 I = 1, N
-        BUF(I) = ' '
-    1 CONTINUE
+      ISNUM = .FALSE.
+      IF (C .GE. 48 .AND. C .LE. 57) ISNUM = .TRUE.
       RETURN
       END
 
